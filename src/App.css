@@ -1,0 +1,358 @@
+/* =========================================
+   BABAFLY NAVBAR
+========================================= */
+
+.baba-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  height: 76px;
+
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(18px);
+
+  border-bottom: 1px solid #eeeeee;
+}
+
+.baba-navbar-inner {
+  width: min(1400px, calc(100% - 48px));
+  height: 100%;
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  gap: 34px;
+}
+
+/* =========================================
+   LOGO
+========================================= */
+
+.baba-logo {
+  display: flex;
+  align-items: baseline;
+
+  font-family: "Manrope", sans-serif;
+
+  font-size: 25px;
+  font-weight: 800;
+
+  letter-spacing: -1.5px;
+
+  white-space: nowrap;
+}
+
+.baba-logo-main {
+  color: #171717;
+}
+
+.baba-logo-fly {
+  color: #ff3f6c;
+}
+
+/* =========================================
+   NAV
+========================================= */
+
+.baba-main-nav {
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+
+  gap: 27px;
+}
+
+.baba-nav-link {
+  position: relative;
+
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+
+  color: #282828;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+  letter-spacing: 0.65px;
+
+  white-space: nowrap;
+
+  transition: color 0.2s ease;
+}
+
+.baba-nav-link:hover {
+  color: #ff3f6c;
+}
+
+.baba-nav-link::after {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  height: 3px;
+
+  background: #ff3f6c;
+
+  transform: scaleX(0);
+  transform-origin: center;
+
+  transition: transform 0.2s ease;
+}
+
+.baba-nav-link:hover::after,
+.baba-nav-link.active::after {
+  transform: scaleX(1);
+}
+
+.baba-sale-link {
+  color: #ff3f6c;
+}
+
+/* =========================================
+   SEARCH
+========================================= */
+
+.baba-search {
+  flex: 1;
+
+  min-width: 180px;
+  max-width: 430px;
+
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+
+  background: #f6f6f6;
+
+  border: 1px solid transparent;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.baba-search:focus-within {
+  background: white;
+  border-color: #dedede;
+}
+
+.baba-search-button {
+  width: 46px;
+  height: 100%;
+
+  border: 0;
+  background: transparent;
+
+  display: grid;
+  place-items: center;
+
+  color: #555;
+}
+
+.baba-search input {
+  width: 100%;
+  height: 100%;
+
+  border: 0;
+  outline: none;
+
+  background: transparent;
+
+  padding: 0 12px 0 0;
+
+  color: #171717;
+
+  font-size: 13px;
+}
+
+.baba-search input::placeholder {
+  color: #999;
+}
+
+/* =========================================
+   ACTIONS
+========================================= */
+
+.baba-actions {
+  display: flex;
+  align-items: center;
+
+  gap: 20px;
+
+  margin-left: auto;
+}
+
+.baba-action {
+  position: relative;
+
+  min-width: 45px;
+
+  border: 0;
+  background: transparent;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 4px;
+
+  padding: 0;
+
+  color: #222;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  white-space: nowrap;
+
+  transition: color 0.2s ease;
+}
+
+.baba-action:hover {
+  color: #ff3f6c;
+}
+
+.baba-action-icon {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.baba-bag-count {
+  position: absolute;
+
+  top: -7px;
+  right: -10px;
+
+  min-width: 15px;
+  height: 15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 3px;
+
+  border-radius: 50%;
+
+  background: #ff3f6c;
+
+  color: white;
+
+  font-size: 8px;
+  font-weight: 700;
+}
+
+/* =========================================
+   MOBILE SEARCH
+========================================= */
+
+.baba-mobile-search {
+  display: none;
+}
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1100px) {
+  .baba-navbar-inner {
+    gap: 20px;
+  }
+
+  .baba-main-nav {
+    gap: 16px;
+  }
+
+  .baba-search {
+    max-width: 300px;
+  }
+
+  .baba-actions {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 850px) {
+  .baba-main-nav {
+    display: none;
+  }
+
+  .baba-search {
+    max-width: none;
+  }
+}
+
+@media (max-width: 600px) {
+  .baba-navbar {
+    height: 66px;
+  }
+
+  .baba-navbar-inner {
+    width: calc(100% - 24px);
+
+    gap: 12px;
+  }
+
+  .baba-logo {
+    font-size: 21px;
+  }
+
+  .baba-search {
+    display: none;
+  }
+
+  .baba-actions {
+    gap: 9px;
+  }
+
+  .baba-action {
+    min-width: 36px;
+  }
+
+  .baba-action span:last-child {
+    display: none;
+  }
+
+  .baba-mobile-search {
+    position: absolute;
+
+    top: 66px;
+    left: 0;
+    right: 0;
+
+    display: block;
+
+    padding: 10px 12px;
+
+    background: white;
+
+    border-bottom: 1px solid #eee;
+  }
+
+  .baba-mobile-search input {
+    width: 100%;
+    height: 42px;
+
+    border: 1px solid #ddd;
+
+    padding: 0 14px;
+
+    outline: none;
+
+    font-size: 13px;
+  }
+}
