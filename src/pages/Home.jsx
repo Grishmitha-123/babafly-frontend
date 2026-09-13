@@ -101,19 +101,18 @@ function Home() {
             <div className="mt-8 flex gap-3">
 
               <Link
-                to="/products"
-                className="bg-white px-7 py-3.5 text-[12px] font-bold uppercase tracking-[1px] text-black transition hover:bg-[#ff3f6c] hover:text-white"
-              >
-                Shop now
-              </Link>
+  to="/products"
+  className="bg-[#ff3f6c] px-7 py-3.5 text-[12px] font-bold uppercase tracking-[1px] text-white"
+>
+  Shop now
+</Link>
 
-              <Link
-                to="/categories"
-                className="border border-white/70 px-7 py-3.5 text-[12px] font-bold uppercase tracking-[1px] text-white transition hover:bg-white hover:text-black"
-              >
-                Explore
-              </Link>
-
+<Link
+  to="/categories"
+  className="border border-white/70 px-7 py-3.5 text-[12px] font-bold uppercase tracking-[1px] text-white"
+>
+  Explore
+</Link>
             </div>
           </div>
 
