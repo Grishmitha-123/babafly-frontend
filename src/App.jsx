@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
-
+import Wishlist from "./pages/Wishlist";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -31,6 +31,8 @@ function App() {
         <Route path="/categories" element={<Categories />} />
 
         <Route path="/categories/:id" element={<CategoryProducts />} />
+
+        <Route path="/wishlist" element={<Wishlist />} />
 
         <Route path="/cart" element={<Cart />} />
 

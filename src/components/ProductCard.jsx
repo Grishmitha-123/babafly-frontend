@@ -1,8 +1,17 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { toggleWishlist } from "../redux/wishlistslice";
 
 function ProductCard({ product }) {
-  const [liked, setLiked] = useState(false);
+  const dispatch = useDispatch();
+
+  const wishlistItems = useSelector(
+    (state) => state.wishlist?.items || []
+  );
+
+  const liked = wishlistItems.some(
+    (item) => item.id === product.id
+  );
 
   const discount = product.discountPercentage
     ? Math.round(product.discountPercentage)
@@ -18,6 +27,10 @@ function ProductCard({ product }) {
   const rating = product.rating
     ? Number(product.rating).toFixed(1)
     : "4.0";
+
+  const handleWishlist = () => {
+    dispatch(toggleWishlist(product));
+  };
 
   return (
     <article className="group relative min-w-0">
@@ -43,8 +56,12 @@ function ProductCard({ product }) {
         {/* WISHLIST */}
         <button
           type="button"
-          onClick={() => setLiked((value) => !value)}
-          aria-label={liked ? "Remove from wishlist" : "Add to wishlist"}
+          onClick={handleWishlist}
+          aria-label={
+            liked
+              ? "Remove from wishlist"
+              : "Add to wishlist"
+          }
           className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/95 shadow-sm transition hover:scale-105"
         >
           <svg
@@ -108,7 +125,9 @@ function ProductCard({ product }) {
 
           {product.stock !== undefined && (
             <span className="text-[10px] text-[#999]">
-              {product.stock > 10 ? "In stock" : "Limited stock"}
+              {product.stock > 10
+                ? "In stock"
+                : "Limited stock"}
             </span>
           )}
         </div>

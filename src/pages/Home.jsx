@@ -6,21 +6,25 @@ function Home() {
       name: "Women",
       image:
         "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=700&q=85",
+      link: "/categories/women",
     },
     {
       name: "Men",
       image:
-        "https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=700&q=85",
+        "https://plus.unsplash.com/premium_photo-1727942421317-382428c9ac44?auto=format&fit=crop&w=700&q=85",
+      link: "/categories/men",
     },
     {
       name: "Sneakers",
       image:
         "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=85",
+      link: "/categories/footwear",
     },
     {
       name: "Accessories",
       image:
         "https://images.unsplash.com/photo-1523779917675-b6ed3a42a561?auto=format&fit=crop&w=700&q=85",
+      link: "/categories/accessories",
     },
   ];
 
@@ -68,7 +72,6 @@ function Home() {
 
       {/* HERO */}
       <section className="px-4 pt-4 sm:px-6 lg:px-8">
-
         <div className="relative mx-auto max-w-[1400px] overflow-hidden bg-[#f1eee9]">
 
           <img
@@ -101,28 +104,33 @@ function Home() {
             <div className="mt-8 flex gap-3">
 
               <Link
-  to="/products"
-  className="bg-[#ff3f6c] px-7 py-3.5 text-[12px] font-bold uppercase tracking-[1px] text-white"
->
-  Shop now
-</Link>
+                to="/products"
+                className="bg-[#ff3f6c] px-7 py-3.5 text-[12px] font-bold uppercase tracking-[1px] text-white"
+              >
+                Shop now
+              </Link>
 
-<Link
-  to="/categories"
-  className="border border-white/70 px-7 py-3.5 text-[12px] font-bold uppercase tracking-[1px] text-white"
->
-  Explore
-</Link>
+              <Link
+                to="/categories"
+                className="border border-white/70 px-7 py-3.5 text-[12px] font-bold uppercase tracking-[1px] text-white"
+              >
+                Explore
+              </Link>
+
             </div>
+
           </div>
 
           <div className="absolute bottom-6 right-6 hidden text-right text-white sm:block">
+
             <p className="text-[10px] uppercase tracking-[2px]">
               New arrivals
             </p>
+
             <p className="mt-1 text-sm font-semibold">
               September / 2026
             </p>
+
           </div>
 
         </div>
@@ -133,17 +141,23 @@ function Home() {
 
         <div className="flex gap-3 overflow-x-auto pb-2">
 
-          {["New In", "Women", "Men", "Kids", "Footwear", "Accessories", "Sale"].map(
-            (item) => (
-              <Link
-                key={item}
-                to="/products"
-                className="shrink-0 border border-[#dedede] px-6 py-3 text-[12px] font-bold uppercase tracking-[0.8px] transition hover:border-black hover:bg-black hover:text-white"
-              >
-                {item}
-              </Link>
-            )
-          )}
+          {[
+            ["New In", "new-in"],
+            ["Women", "women"],
+            ["Men", "men"],
+            ["Kids", "kids"],
+            ["Footwear", "footwear"],
+            ["Accessories", "accessories"],
+            ["Sale", "sale"],
+          ].map(([item, id]) => (
+            <Link
+              key={item}
+              to={`/categories/${id}`}
+              className="shrink-0 border border-[#dedede] px-6 py-3 text-[12px] font-bold uppercase tracking-[0.8px] text-[#555] transition hover:border-black hover:bg-black hover:!text-white"
+            >
+              {item}
+            </Link>
+          ))}
 
         </div>
 
@@ -155,6 +169,7 @@ function Home() {
         <div className="mb-8 flex items-end justify-between">
 
           <div>
+
             <p className="mb-2 text-[11px] font-bold uppercase tracking-[2px] text-[#ff3f6c]">
               Shop your way
             </p>
@@ -162,6 +177,7 @@ function Home() {
             <h2 className="font-['Manrope'] text-[30px] font-extrabold tracking-[-1px] sm:text-[36px]">
               Find your thing.
             </h2>
+
           </div>
 
           <Link
@@ -178,9 +194,10 @@ function Home() {
           {categories.map((category) => (
             <Link
               key={category.name}
-              to="/products"
+              to={category.link}
               className="group relative overflow-hidden bg-[#f4f4f4]"
             >
+
               <img
                 src={category.image}
                 alt={category.name}
@@ -188,6 +205,7 @@ function Home() {
               />
 
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/70 to-transparent px-5 pb-5 pt-16">
+
                 <h3 className="font-['Manrope'] text-xl font-bold text-white">
                   {category.name}
                 </h3>
@@ -195,11 +213,14 @@ function Home() {
                 <span className="mt-1 block text-[11px] font-semibold uppercase tracking-[1px] text-white/80">
                   Shop now →
                 </span>
+
               </div>
+
             </Link>
           ))}
 
         </div>
+
       </section>
 
       {/* TRENDING */}
@@ -210,6 +231,7 @@ function Home() {
           <div className="mb-8 flex items-end justify-between">
 
             <div>
+
               <p className="mb-2 text-[11px] font-bold uppercase tracking-[2px] text-[#ff3f6c]">
                 Most wanted
               </p>
@@ -217,6 +239,7 @@ function Home() {
               <h2 className="font-['Manrope'] text-[30px] font-extrabold tracking-[-1px] sm:text-[36px]">
                 Trending right now.
               </h2>
+
             </div>
 
             <Link
@@ -315,16 +338,17 @@ function Home() {
               need a reason for.
             </p>
 
-            <Link
-              to="/products"
-              className="mt-8 inline-block bg-[#ff3f6c] px-7 py-3.5 text-[12px] font-bold uppercase tracking-[1px] transition hover:bg-white hover:text-black"
-            >
-              Shop the sale
-            </Link>
+         <Link
+  to="/categories/sale"
+  className="mt-8 inline-block border border-solid border-[#ff3f6c] bg-[#ff3f6c] px-7 py-3.5 text-[12px] font-bold uppercase tracking-[1px] !text-white transition-all duration-200 hover:!border-black hover:!bg-white hover:!text-black"
+>
+  Shop the sale
+</Link>
 
           </div>
 
           <div className="absolute -right-20 -top-40 h-[500px] w-[500px] rounded-full border-[90px] border-white/[0.04]" />
+
           <div className="absolute -bottom-52 right-20 h-[450px] w-[450px] rounded-full border-[70px] border-[#ff3f6c]/10" />
 
         </div>
@@ -346,6 +370,7 @@ function Home() {
               key={number}
               className="px-5 py-8 sm:px-7"
             >
+
               <span className="text-[10px] font-bold text-[#ff3f6c]">
                 {number}
               </span>
@@ -357,6 +382,7 @@ function Home() {
               <p className="mt-1 text-[11px] text-[#888]">
                 {text}
               </p>
+
             </div>
           ))}
 

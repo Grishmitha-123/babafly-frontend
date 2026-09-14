@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const token = localStorage.getItem("token");
+const savedUser = localStorage.getItem("babafly-current-user");
 
 const initialState = {
   token: token || null,
   isAuthenticated: token ? true : false,
-  user: null,
+  user: savedUser ? JSON.parse(savedUser) : null,
 };
 
 const authSlice = createSlice({
@@ -20,6 +21,13 @@ const authSlice = createSlice({
       state.isAuthenticated = true;
 
       localStorage.setItem("token", action.payload.token);
+
+      if (action.payload.user) {
+        localStorage.setItem(
+          "babafly-current-user",
+          JSON.stringify(action.payload.user)
+        );
+      }
     },
 
     logout: (state) => {
@@ -28,6 +36,7 @@ const authSlice = createSlice({
       state.isAuthenticated = false;
 
       localStorage.removeItem("token");
+      localStorage.removeItem("babafly-current-user");
     },
   },
 });
