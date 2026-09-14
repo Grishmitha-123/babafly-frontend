@@ -1,5 +1,5 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../redux/authSlice";
 import { resetCart } from "../redux/cartSlice";
@@ -11,6 +11,10 @@ function Navbar() {
   const dispatch = useDispatch();
 
   const [search, setSearch] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const searchRef = useRef(null);
 
   const isAuthenticated = useSelector(
     (state) => state.auth?.isAuthenticated
@@ -29,32 +33,107 @@ function Navbar() {
     0
   );
 
+  // GET PRODUCT RECOMMENDATIONS
+  useEffect(() => {
+    const query = search.trim().toLowerCase();
+
+    if (!query) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    const getProducts = async () => {
+      try {
+        const response = await fetch(
+          "https://dummyjson.com/products?limit=0"
+        );
+
+        const data = await response.json();
+
+        const matches = data.products
+          .filter((product) => {
+            const title = product.title?.toLowerCase() || "";
+            const brand = product.brand?.toLowerCase() || "";
+            const category = product.category?.toLowerCase() || "";
+
+            return (
+              title.includes(query) ||
+              brand.includes(query) ||
+              category.includes(query)
+            );
+          })
+          .slice(0, 5);
+
+        setSuggestions(matches);
+        setShowSuggestions(true);
+      } catch (error) {
+        console.error("Search recommendations failed:", error);
+        setSuggestions([]);
+      }
+    };
+
+    const timer = setTimeout(getProducts, 250);
+
+    return () => clearTimeout(timer);
+  }, [search]);
+
+  // CLOSE SEARCH WHEN CLICKING OUTSIDE
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        searchRef.current &&
+        !searchRef.current.contains(event.target)
+      ) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener(
+        "mousedown",
+        handleClickOutside
+      );
+    };
+  }, []);
+
   const handleSearch = (event) => {
     event.preventDefault();
 
     const query = search.trim();
+
+    setShowSuggestions(false);
 
     if (!query) {
       navigate("/products");
       return;
     }
 
-    navigate(`/products?search=${encodeURIComponent(query)}`);
+    navigate(
+      `/products?search=${encodeURIComponent(query)}`
+    );
+  };
+
+  const handleSuggestionClick = () => {
+    setShowSuggestions(false);
   };
 
   const handleLogout = () => {
-  dispatch(resetCart());
-  dispatch(resetWishlist());
-  dispatch(logout());
+    dispatch(resetCart());
+    dispatch(resetWishlist());
+    dispatch(logout());
 
-  navigate("/");
-};
+    navigate("/");
+  };
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-100 bg-white/95 backdrop-blur-md">
       <div className="mx-auto flex h-[76px] max-w-[1400px] items-center gap-8 px-6">
 
         {/* LOGO */}
+
         <Link
           to="/"
           className="shrink-0 font-['Manrope'] text-[25px] font-extrabold tracking-[-1.5px]"
@@ -63,6 +142,7 @@ function Navbar() {
         </Link>
 
         {/* NAVIGATION */}
+
         <nav className="hidden h-full items-center gap-7 lg:flex">
 
           <Link
@@ -123,9 +203,11 @@ function Navbar() {
         </nav>
 
         {/* SEARCH */}
+
         <form
+          ref={searchRef}
           onSubmit={handleSearch}
-          className="ml-auto hidden h-[42px] max-w-[400px] flex-1 items-center bg-[#f6f6f6] md:flex"
+          className="relative ml-auto hidden h-[42px] max-w-[400px] flex-1 items-center bg-[#f6f6f6] md:flex"
         >
 
           <button
@@ -150,16 +232,87 @@ function Navbar() {
             type="text"
             value={search}
             onChange={(event) => setSearch(event.target.value)}
+            onFocus={() => {
+              if (search.trim() && suggestions.length > 0) {
+                setShowSuggestions(true);
+              }
+            }}
             placeholder="Search for products, brands and more"
             className="h-full w-full bg-transparent pr-4 text-[13px] outline-none placeholder:text-[#999]"
           />
 
+          {/* RECOMMENDATIONS */}
+
+          {showSuggestions && search.trim() && (
+            <div className="absolute left-0 right-0 top-[48px] z-[100] border border-[#eeeeee] bg-white shadow-lg">
+
+              {suggestions.length > 0 ? (
+                <>
+                  {suggestions.map((product) => (
+                    <Link
+                      key={product.id}
+                      to={`/products/${product.id}`}
+                      onClick={handleSuggestionClick}
+                      className="flex items-center gap-3 border-b border-[#f0f0f0] px-4 py-3 transition hover:bg-[#fafafa]"
+                    >
+
+                      <div className="h-[52px] w-[42px] shrink-0 bg-[#f6f6f6]">
+                        <img
+                          src={product.thumbnail}
+                          alt={product.title}
+                          className="h-full w-full object-cover"
+                        />
+                      </div>
+
+                      <div className="min-w-0 flex-1">
+
+                        <p className="truncate text-[12px] font-semibold text-[#222]">
+                          {product.title}
+                        </p>
+
+                        <p className="mt-1 truncate text-[10px] capitalize text-[#999]">
+                          {product.brand || product.category}
+                        </p>
+
+                      </div>
+
+                      <span className="shrink-0 text-[12px] font-bold text-[#222]">
+                        ₹{Math.round(product.price * 84).toLocaleString("en-IN")}
+                      </span>
+
+                    </Link>
+                  ))}
+
+                  <button
+                    type="submit"
+                    className="w-full px-4 py-3 text-left text-[10px] font-bold uppercase tracking-[1px] text-[#ff3f6c] transition hover:bg-[#fafafa]"
+                  >
+                    View all results →
+                  </button>
+                </>
+              ) : (
+                <div className="px-4 py-6 text-center">
+                  <p className="text-[12px] font-semibold text-[#333]">
+                    No products found
+                  </p>
+
+                  <p className="mt-1 text-[10px] text-[#999]">
+                    Try searching for something else.
+                  </p>
+                </div>
+              )}
+
+            </div>
+          )}
+
         </form>
 
         {/* ACTIONS */}
+
         <div className="flex items-center gap-5">
 
           {/* PROFILE */}
+
           {isAuthenticated ? (
             <div className="group relative">
 
@@ -185,6 +338,7 @@ function Navbar() {
               </button>
 
               {/* PROFILE MENU */}
+
               <div className="invisible absolute right-0 top-full mt-2 w-[190px] translate-y-2 border border-gray-100 bg-white p-4 opacity-0 shadow-lg transition duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
 
                 <p className="truncate text-[13px] font-bold text-[#222]">
@@ -220,6 +374,7 @@ function Navbar() {
                 </button>
 
               </div>
+
             </div>
           ) : (
             <Link
@@ -245,6 +400,7 @@ function Navbar() {
           )}
 
           {/* WISHLIST */}
+
           <Link
             to="/wishlist"
             className="flex min-w-[42px] flex-col items-center gap-1 text-[#222] transition hover:text-[#ff3f6c]"
@@ -266,11 +422,13 @@ function Navbar() {
           </Link>
 
           {/* BAG */}
+
           <Link
             to="/cart"
             className="flex min-w-[42px] flex-col items-center gap-1 text-[#222] transition hover:text-[#ff3f6c]"
           >
             <div className="relative">
+
               <svg
                 width="21"
                 height="21"
@@ -288,14 +446,17 @@ function Navbar() {
                   {cartCount}
                 </span>
               )}
+
             </div>
 
             <span className="hidden text-[11px] font-semibold sm:block">
               Bag
             </span>
+
           </Link>
 
         </div>
+
       </div>
     </header>
   );
